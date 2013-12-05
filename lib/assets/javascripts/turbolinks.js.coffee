@@ -261,10 +261,10 @@ initializeTurbolinks = ->
     if state?.turbolinks
       if pageCache[state.position]
         fetchHistory state.position
-      else if !meta || meta.lastPopstate != "fancybox"
+      else if !meta || meta.lastPopstate != "modal"
         visit event.target.location.href
       else
-        meta.lastPushState = ""
+        meta.lastPopstate = ""
   , false
 
 browserSupportsPushState =
