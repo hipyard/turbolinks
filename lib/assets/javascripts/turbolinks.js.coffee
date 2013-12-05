@@ -261,8 +261,10 @@ initializeTurbolinks = ->
     if state?.turbolinks
       if pageCache[state.position]
         fetchHistory state.position
-      else
+      else if !meta || meta.lastPopstate != "fancybox"
         visit event.target.location.href
+      else
+        meta.lastPushState = ""
   , false
 
 browserSupportsPushState =
@@ -287,6 +289,6 @@ else
 
 # Public API
 #   Turbolinks.visit(url)
-#   Turbolinks.pagesCached() 
+#   Turbolinks.pagesCached()
 #   Turbolinks.pagesCached(20)
 @Turbolinks = { visit, pagesCached }
