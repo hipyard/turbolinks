@@ -516,12 +516,12 @@ installHistoryChangeHandler = (event) ->
   if cancelled
     cancelled = false
     return true
-  if event.state?.turbolinks
-    if cachedPage = pageCache[(new ComponentUrl(event.state.url)).absolute]
+  if event.originalEvent.state?.turbolinks
+    if cachedPage = pageCache[(new ComponentUrl(event.originalEvent.state.url)).absolute]
       cacheCurrentPage()
       fetchHistory cachedPage
     else if !meta || meta.lastPopstate != "modal"
-      visit event.target.location.href
+      visit event.originalEvent.target.location.href
     else
       meta.lastPopstate = ""
   true
