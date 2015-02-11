@@ -509,7 +509,13 @@ installJqueryAjaxSuccessPageUpdateTrigger = ->
       return unless jQuery.trim xhr.responseText
       triggerEvent EVENTS.UPDATE
 
+# flag to cancel popstate one time
+cancelled = false
+
 installHistoryChangeHandler = (event) ->
+  if cancelled
+    cancelled = false
+    return
   if event.state?.turbolinks
     if cachedPage = pageCache[(new ComponentUrl(event.state.url)).absolute]
       cacheCurrentPage()
@@ -530,6 +536,9 @@ initializeTurbolinks = ->
     rememberCurrentState()
   bypassOnLoadPopstate ->
     $(window).on 'popstate', installHistoryChangeHandler, false
+
+cancel = ->
+  cancelled = true
 
 # Handle bug in Firefox 26/27 where history.state is initially undefined
 historyStateIsDefined =
@@ -574,6 +583,7 @@ else
   cacheCurrentPage,
   enableTransitionCache,
   enableProgressBar,
+  cancel,
   allowLinkExtensions: Link.allowExtensions,
   supported: browserSupportsTurbolinks,
   EVENTS: clone(EVENTS)
