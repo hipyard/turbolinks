@@ -515,15 +515,12 @@ cancelled = false
 installHistoryChangeHandler = (event) ->
   if cancelled
     cancelled = false
-    return true
-  if event.originalEvent.state?.turbolinks
+  else if event.originalEvent.state?.turbolinks
     if cachedPage = pageCache[(new ComponentUrl(event.originalEvent.state.url)).absolute]
       cacheCurrentPage()
       fetchHistory cachedPage
-    else if !meta || meta.lastPopstate != "modal"
-      visit event.originalEvent.target.location.href
     else
-      meta.lastPopstate = ""
+      visit event.originalEvent.target.location.href
   true
 
 initializeTurbolinks = ->
@@ -535,6 +532,7 @@ initializeTurbolinks = ->
   $(window).on 'hashchange', (event) ->
     rememberCurrentUrl()
     rememberCurrentState()
+    true
   bypassOnLoadPopstate ->
     $(window).on 'popstate', installHistoryChangeHandler
 
