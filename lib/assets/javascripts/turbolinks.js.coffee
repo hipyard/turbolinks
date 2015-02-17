@@ -206,11 +206,6 @@ clone = (original) ->
   copy[key] = clone value for key, value of original
   copy
 
-popCookie = (name) ->
-  value = document.cookie.match(new RegExp(name+"=(\\w+)"))?[1].toUpperCase() or ''
-  document.cookie = name + '=; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/'
-  value
-
 triggerEvent = (name, data) ->
   if typeof Prototype isnt 'undefined'
     Event.fire document, name, data, true
@@ -549,10 +544,7 @@ browserSupportsPushState =
 browserIsntBuggy =
   !navigator.userAgent.match /CriOS\//
 
-requestMethodIsSafe =
-  popCookie('request_method') in ['GET','']
-
-browserSupportsTurbolinks = browserSupportsPushState and browserIsntBuggy and requestMethodIsSafe
+browserSupportsTurbolinks = browserSupportsPushState and browserIsntBuggy
 
 browserSupportsCustomEvents =
   document.addEventListener and document.createEvent
